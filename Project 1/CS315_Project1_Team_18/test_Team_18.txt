@@ -1,0 +1,281 @@
+# Example program 1
+main(){
+
+	# Printing inital altitude and heading of the drone
+	droneque.print(droneque.read_heading());
+	droneque.print(droneque.read_altitude());
+
+	# Now drone starts taking off
+	var altitude_counter;
+
+	# 50 meters up from ground
+	while (setAltitude(50)){
+		droneque.vertically_climb_up();
+		++altitude_counter;
+	}
+	# Spraying a square field
+	var edge = 50;
+
+    # Pre increment by one edge
+    ++edge;
+
+    # Pre decrement by one edge
+    --edge;
+    
+	sprayASquareField(edge);
+
+	# Vertically declining
+	var bottom_altitude = 75;
+	var current_altitude = droneque.read_altitude();
+	while(current_altitude > bottom_altitude){
+		droneque.vertically_drop_down();
+		current_altitude--;
+	}
+	droneque.print(droneque.read_altitude());
+
+	# Reading Temperature
+	droneque_print(droneque.read_temperature());
+}
+
+# Function that sets altitude and returns it
+function setAltitude(var altitude){
+	return altitude;
+}
+
+# Function that draws a square according to edge parameter
+function sprayASquareField(var edge){
+	droneque.spray_on(); # Spray on
+	for(var path = 0; path < edge; ++path){
+		droneque.horizontally_move_forward();
+	}
+	for(var degree = 0; degree < 90; ++degree){
+		droneque.turn_right();
+	}
+	for(var path = 0; path < edge; ++path){
+		droneque.horizontally_move_forward();
+	}
+	for(var degree = 0; degree < 90; degree++){
+		droneque.turn_right();
+	}
+	for(var path = 0; path < edge; path++){
+		droneque.horizontally_move_forward();
+	}
+	for(var degree = 0; degree < 90; degree++){
+		droneque.turn_right();
+	}
+	for(var path = 0; path < edge; path++){
+		droneque.horizontally_move_forward();
+	}
+	droneque.spray_off(); # Spray off
+}
+
+
+#*
+This function is to warn user if altitude is too high
+@parameter: altitude 
+@return: void 
+*#
+function checkAltitude(var altitude){
+	if(altitude >= 0 and altitude < 400){
+		droneque.print("Altitude is normal");
+	}
+	else if(altitude >= 400 and altitude < 500){
+		droneque.print("Altitude is above the limit please do not go higher");
+	}
+	else{
+		droneque.print("ALERT ALERT ALERT! Altitude above the limit drone will automatically descend");
+		while( altitude >= 400){
+			altitude -= 50; # Altitude decreases by 50 feet in each iteration
+			droneque.vertically_drop_down();
+	}
+}
+
+#*
+This function is to check whether temperature is normal or not
+@parameter: temperature
+@return: string
+*#
+function checkTemperature(var temperature){
+	var output;
+	if(temperature <= -5){
+		output = "Temperature is below standart please shut down the drone (Press W)";
+		var input = droneque.input();
+		if(input == W){
+			droneque.exit();
+		}
+	}
+	else if(temperature >= 50){
+		output = "Temperature is above standart please shut down the drone (Press W)";
+		var input = droneque.input();
+		if(input == W){
+			droneque.exit();
+		}
+	}
+	else{
+		output = "Temperatue is normal;
+	}
+	return output;
+}
+
+#*
+This function is to convert degree to direction 
+@parameter: degree
+@return: string
+*#
+function degreeToDirection(var degree){
+	var direction;
+	if(degree == 0 or degree == 360){
+		direction = "North";
+	}
+	else if(degree > 0 and degree < 45){
+		direction = "North-Northeast";
+	}
+	else if(degree == 45){
+		direction = "Northeast"
+	}
+	else if(degree > 45 and degree < 90){
+		direction = "Northeast-East";
+	}
+	else if(degree == 90){
+		direction = "East";
+	}
+	else if(degree > 90 and degree < 135){
+		direction = "East-Southeast";
+	}
+	else if(degree == 135){
+		direction = "Southeast";
+	}
+	else if(degree > 135 and degree < 180){
+		direction = "Southeast-South";
+	}
+	else if(degree == 180){
+		direction = "South";
+	}
+	else if(degree > 180 and degree < 225){
+		direction = "South-Southwest";
+	}
+	else if(degree == 225){
+		direction = "Southwest";
+	}
+	else if(degree > 225 and degree < 270){
+		direction = "Southwest-West";
+	}
+	else if(degree == 270{
+		direction = "West";
+	}
+	else if(degree > 270 and degree < 315){
+		direction = "West-Northwest";
+	}
+	else if(degree == 315){
+		direction = "Northwest";
+	}
+	else if(degree > 315 and degree < 360){
+		direction = "Northwest-North";
+	}
+	return direction;
+}
+
+main(){
+	# User guide of Droneque
+	droneque.print("Welcome to droneque! In this user guide some features will be presented to you");
+
+	#For takeoff
+	droneque.print("For take off press W, to drop down press S, to stop press Z");
+	var takeoff = droneque.input();
+	if(takeoff == "W"){
+		droneque.vertically_climb_up();
+	}
+	else if(movement == "S"{
+		droneque.horizontally_move_backward();
+	}
+	else if(movement == "Z"{
+		droneque.horizontally_stop();
+	}
+	else{
+		droneque.print("Error! You did not press W, S or Z");
+	}
+
+
+	#For horizontally movement
+	droneque.print("For horizontally move forward press F, to move backward press B, and to stop S");
+	var movement = droneque.input();
+	if(movement == "F"){
+		droneque.horizontally_move_forward();
+	}
+	else if(movement == "B"{
+		droneque.horizontally_move_backward();
+	}
+	else if(movement == "S"{
+		droneque.horizontally_stop();
+	}
+	else{
+		droneque.print("Error! You did not press F, B or S");
+	}
+
+
+	#Turn left or right
+	droneque.print("To turn left press L, to right press R");
+	var movement = droneque.input();
+	if(movement == "L"){
+		droneque.turn_left();
+	}
+	else if(movement == "R"){
+		droneque.turn_right();
+	}	
+	else{
+		droneque.print("Error! You did not press L or S");
+	}
+
+	#To spray on or off
+	droneque.print("To spray-on press O, to spray-off press P");
+	var movement = droneque.input();
+	if(movement == "O"){
+		droneque.spray_on();
+	}
+	else if(movement == "P"){
+		droneque.spray_off();
+	}
+	else{
+		droneque.print("Error! You did not press O or P");
+	}
+
+	#Read heading, altitude or temperature
+	droneque.print("To read heading press H, to read altitude press A, to read temperature press T");
+	var movement = droneque.input();
+	if(movement == "H"){
+		droneque.read_heading();
+	}
+	else if(movement == "A"){
+		droneque.read_altitude();
+	}
+	else if(movement == "T"){
+		droneque.read_temperature();
+	}
+	else{
+		droneque.print("Error! You did not press H, A or T");
+	}
+
+	#Connect with computer
+	droneque.print("To connect with computer press C, to mobile press M");
+	var movement = droneque.input();
+	if(movement == "C"){
+		droneque.connect_with_computer();
+	}
+	else if(movement == "M"){
+		droneque.connect_with_mobile();
+	}
+	else{
+		droneque.print("Error! You did not press C or M");
+	}
+	
+	#Quit
+	droneque.print("To quit press Q);
+	var movement = droneque.input();
+	if(movement == "Q"){
+		droneque.exit();
+	}
+	else{
+		droneque.print("Error! You did not press Q");
+	}
+}
+		
